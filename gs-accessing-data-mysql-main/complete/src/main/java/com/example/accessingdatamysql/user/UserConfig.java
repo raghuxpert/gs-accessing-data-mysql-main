@@ -1,6 +1,7 @@
 package com.example.accessingdatamysql.user;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -23,11 +24,25 @@ import javax.sql.DataSource;
         basePackages = { "com.example.accessingdatamysql.user" }
 )
 public class UserConfig {
+//    @Primary
+//    @Bean(name = "dataSource")
+//    @ConfigurationProperties(prefix = "spring.datasource")
+//    public DataSource dataSource() {
+//        return DataSourceBuilder.create().build();
+//    }
+
+    @Bean
     @Primary
+    @ConfigurationProperties("user.datasource")
+    public DataSourceProperties fooDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
     @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
+    @Primary
+    @ConfigurationProperties("user.datasource")
+    public DataSource fooDataSource() {
+        return fooDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
     @Primary

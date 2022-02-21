@@ -1,6 +1,7 @@
 package com.example.accessingdatamysql.city;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -24,10 +25,22 @@ import javax.sql.DataSource;
         basePackages = { "com.example.accessingdatamysql.city" }
 )
 public class CityConfig {
+//    @Bean(name = "cityDataSource")
+//    @ConfigurationProperties(prefix = "city.datasource")
+//    public DataSource dataSource() {
+//        return DataSourceBuilder.create().build();
+//    }
+
+    @Bean
+    @ConfigurationProperties("city.datasource")
+    public DataSourceProperties barDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
     @Bean(name = "cityDataSource")
-    @ConfigurationProperties(prefix = "city.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
+    @ConfigurationProperties("city.datasource")
+    public DataSource barDataSource() {
+        return barDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
     @Bean(name = "cityEntityManagerFactory")
